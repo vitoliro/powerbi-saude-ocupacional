@@ -1,8 +1,8 @@
-# Portfólio SSO: controle de ASOs e custos de exames em Power BI
+# Saúde Ocupacional em Power BI: controle de ASOs e custos de exames
 
-> Automações do mesmo projeto (PowerShell + Power Automate): [automacoes-sso](https://github.com/vitoliro/automacoes-sso)
+> Automações do mesmo projeto (PowerShell + Power Automate): [automacao-saude-ocupacional](https://github.com/vitoliro/automacao-saude-ocupacional)
 
-Dois relatórios Power BI completos, em formato PBIP, construídos sobre **dados 100% fictícios** gerados por script. Eles reproduzem a estrutura de soluções reais de Saúde Ocupacional (SSO), sem nenhum dado de empresa, pessoa ou contrato real.
+Dois relatórios Power BI completos, em formato PBIP, construídos sobre **dados 100% fictícios** gerados por script. Eles reproduzem a estrutura de soluções reais de Saúde Ocupacional, sem nenhum dado de empresa, pessoa ou contrato real.
 
 | Relatório | Páginas | O que responde |
 |---|---|---|
