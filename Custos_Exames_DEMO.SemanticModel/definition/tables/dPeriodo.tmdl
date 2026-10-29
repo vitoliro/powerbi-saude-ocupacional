@@ -1,0 +1,41 @@
+table dPeriodo
+	lineageTag: 5fe7c49c-4112-493e-8c52-5f3dafd579a9
+
+	column PERÍODO
+		dataType: string
+		lineageTag: 3bd0bcbb-bea6-476e-ab7d-d14b0f352845
+		summarizeBy: none
+		sourceColumn: PERÍODO
+		sortByColumn: ORDEM
+
+		annotation SummarizationSetBy = Automatic
+
+	column FATOR
+		dataType: int64
+		formatString: 0
+		lineageTag: 31b39c4f-9820-4f2c-ad46-903a7ff587f6
+		summarizeBy: none
+		sourceColumn: FATOR
+
+		annotation SummarizationSetBy = Automatic
+
+	column ORDEM
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0f3014d3-c7cc-49fa-b7ef-c783377f51dd
+		summarizeBy: none
+		sourceColumn: ORDEM
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dPeriodo = m
+		mode: import
+		source =
+				let
+				    Fonte = #table(type table [#"PERÍODO" = text, #"FATOR" = Int64.Type, #"ORDEM" = Int64.Type], {{"Mensal", 1, 1}, {"Anual", 12, 2}})
+				in
+				    Fonte
+
+	annotation PBI_ResultType = Table
+

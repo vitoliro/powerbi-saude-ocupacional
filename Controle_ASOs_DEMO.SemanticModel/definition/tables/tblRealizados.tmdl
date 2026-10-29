@@ -1,0 +1,115 @@
+table tblRealizados
+	lineageTag: f248f2f2-69a0-41aa-a241-1d875b383a01
+
+	column CPF
+		dataType: string
+		lineageTag: 4113f901-55ab-4ef9-83f1-749f309f47aa
+		summarizeBy: none
+		sourceColumn: CPF
+
+		annotation SummarizationSetBy = Automatic
+
+	column NOME
+		dataType: string
+		lineageTag: c643c03b-34c8-4a29-a7ce-b88911e04f82
+		summarizeBy: none
+		sourceColumn: NOME
+
+		annotation SummarizationSetBy = Automatic
+
+	column EMPRESA
+		dataType: string
+		lineageTag: 4746bc11-1efa-4b6c-8bb8-f23612087387
+		summarizeBy: none
+		sourceColumn: EMPRESA
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'UNIDADE DE NEGÓCIO'
+		dataType: string
+		lineageTag: 9a8ce6b5-a8f2-4352-a446-96136dcab8d8
+		summarizeBy: none
+		sourceColumn: UNIDADE DE NEGÓCIO
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'TIPO DE ASO'
+		dataType: string
+		lineageTag: 256fb674-4e67-4306-b6f1-c319efa03686
+		summarizeBy: none
+		sourceColumn: TIPO DE ASO
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'DATA DE REALIZAÇÃO'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: e1b5225e-40ca-4d77-9030-01bac69b6241
+		summarizeBy: none
+		sourceColumn: DATA DE REALIZAÇÃO
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'VENCIMENTO ANTERIOR'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: fba84086-0d2b-4d8e-9c54-60a070400a55
+		summarizeBy: none
+		sourceColumn: VENCIMENTO ANTERIOR
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'DIAS ANTECIPADOS'
+		dataType: int64
+		formatString: 0
+		lineageTag: 8c8784ca-b80c-417c-81f0-5939407d0246
+		summarizeBy: none
+		sourceColumn: DIAS ANTECIPADOS
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'FAIXA DE ANTECIPAÇÃO'
+		dataType: string
+		lineageTag: 48153004-749d-479b-a84e-9e12a8353c76
+		summarizeBy: none
+		sourceColumn: FAIXA DE ANTECIPAÇÃO
+
+		annotation SummarizationSetBy = Automatic
+
+	column MÊS
+		dataType: string
+		lineageTag: 104f0b75-499d-44e4-980f-98293d74bcd5
+		summarizeBy: none
+		sourceColumn: MÊS
+		sortByColumn: 'MÊS ORDEM'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'MÊS ORDEM'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b670c4ab-f95d-4f09-a51f-0efd42caf857
+		summarizeBy: none
+		sourceColumn: MÊS ORDEM
+
+		annotation SummarizationSetBy = Automatic
+
+	partition tblRealizados = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(PastaDados & "Base_Controle_ASOs_DEMO.xlsx"), null, true),
+				    Tabela = Fonte{[Item="tblRealizados",Kind="Table"]}[Data],
+				    Tipos = Table.TransformColumnTypes(Tabela, {{"CPF", type text}, {"NOME", type text}, {"EMPRESA", type text}, {"UNIDADE DE NEGÓCIO", type text}, {"TIPO DE ASO", type text}, {"DATA DE REALIZAÇÃO", type date}, {"VENCIMENTO ANTERIOR", type date}, {"DIAS ANTECIPADOS", Int64.Type}, {"FAIXA DE ANTECIPAÇÃO", type text}}),
+				    Mes = Table.AddColumn(Tipos, "MÊS", each Date.ToText([DATA DE REALIZAÇÃO], "MMM/yy", "pt-BR"), type text),
+				    MesOrdem = Table.AddColumn(Mes, "MÊS ORDEM", each Date.Year([DATA DE REALIZAÇÃO]) * 100 + Date.Month([DATA DE REALIZAÇÃO]), Int64.Type)
+				in
+				    MesOrdem
+
+	annotation PBI_ResultType = Table
+

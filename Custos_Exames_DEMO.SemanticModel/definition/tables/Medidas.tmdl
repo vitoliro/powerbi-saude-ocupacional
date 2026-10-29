@@ -1,0 +1,358 @@
+/// Tabela só de medidas
+table Medidas
+	lineageTag: f6ad3c0c-fe5b-49f6-ad21-68fda16ab574
+
+	/// 1 para mensal, 12 para anual.
+	measure 'Fator Período' = SELECTEDVALUE ( dPeriodo[FATOR], 1 )
+		formatString: 0
+		displayFolder: 0. Base
+		lineageTag: c6584fad-a117-497b-b762-5928491d997b
+
+	/// 1 com per capita, 0 sem.
+	measure 'Inclui Per Capita' = SELECTEDVALUE ( dPerCapita[INCLUI], 1 )
+		formatString: 0
+		displayFolder: 0. Base
+		lineageTag: cef612c4-beb1-43fe-a382-ad0c34f4b99c
+
+	measure 'Volume do Mês' = SUM ( fExameEmpresa[VOLUME MENSAL] )
+		formatString: #,0
+		displayFolder: 0. Base
+		lineageTag: 4d753dbf-50f7-49a7-9ba6-378855e18291
+
+	measure 'Total de Vidas' = SUM ( dEmpresa[VIDAS] )
+		formatString: #,0
+		displayFolder: 0. Base
+		lineageTag: 39a88a27-b6dc-4751-a952-5a20c11a66b9
+
+	measure 'Qtd Exames' = COUNTROWS ( dExame )
+		formatString: #,0
+		displayFolder: 0. Base
+		lineageTag: f8b9a8e0-cf9e-4490-b27a-e13a0da42ace
+
+	measure 'Exames Atual (mês)' = SUMX ( fExameEmpresa, fExameEmpresa[VOLUME MENSAL] * fExameEmpresa[PREÇO ATUAL] )
+		formatString: \R\$ #,0
+		displayFolder: 0. Base
+		lineageTag: 4629b205-df26-4604-97e1-1ece6a2aa826
+
+	measure 'Exames Novo (mês)' = SUMX ( fExameEmpresa, fExameEmpresa[VOLUME MENSAL] * RELATED ( dExame[NOVO PREÇO] ) )
+		formatString: \R\$ #,0
+		displayFolder: 0. Base
+		lineageTag: df9d3ae8-8c82-4f35-be6a-87a4633de9d1
+
+	measure 'Per Capita Atual (mês)' = SUMX ( dEmpresa, dEmpresa[VIDAS] * dEmpresa[PER CAPITA ATUAL] )
+		formatString: \R\$ #,0
+		displayFolder: 0. Base
+		lineageTag: 7e606d11-6e2b-4e99-9adf-b8c781270c89
+
+	measure 'Per Capita Novo (mês)' = SUMX ( dEmpresa, dEmpresa[VIDAS] * dEmpresa[PER CAPITA NOVO] )
+		formatString: \R\$ #,0
+		displayFolder: 0. Base
+		lineageTag: e74f5e89-eee2-431c-92e6-1ac757d40f54
+
+	measure 'Custo Exames Atual' = [Exames Atual (mês)] * [Fator Período]
+		formatString: \R\$ #,0
+		displayFolder: 1. Atual x Novo
+		lineageTag: 46c1d013-da8f-44c3-8d07-52bf894911d4
+
+	measure 'Custo Exames Novo' = [Exames Novo (mês)] * [Fator Período]
+		formatString: \R\$ #,0
+		displayFolder: 1. Atual x Novo
+		lineageTag: f1f24d9c-0a2d-4fef-a2e2-2e51a3f64647
+
+	measure 'Custo Per Capita Atual' = [Per Capita Atual (mês)] * [Inclui Per Capita] * [Fator Período]
+		formatString: \R\$ #,0
+		displayFolder: 1. Atual x Novo
+		lineageTag: c34bd719-db2d-4d5f-bfc5-50b05dad5181
+
+	measure 'Custo Per Capita Novo' = [Per Capita Novo (mês)] * [Inclui Per Capita] * [Fator Período]
+		formatString: \R\$ #,0
+		displayFolder: 1. Atual x Novo
+		lineageTag: 29d03d4d-03e6-4f78-b62c-97b3231c09e1
+
+	/// Exames na tabela atual de cada empresa + per capita (se incluído).
+	measure 'Custo Atual' = [Custo Exames Atual] + [Custo Per Capita Atual]
+		formatString: \R\$ #,0
+		displayFolder: 1. Atual x Novo
+		lineageTag: 10e71307-cfec-4a4b-8b7f-19408519024c
+
+	/// Exames na tabela unificada negociada + per capita novo (se incluído).
+	measure 'Custo Novo' = [Custo Exames Novo] + [Custo Per Capita Novo]
+		formatString: \R\$ #,0
+		displayFolder: 1. Atual x Novo
+		lineageTag: 18284aa8-6d5a-48f3-a3b2-efaff5cfcb18
+
+	measure Economia = [Custo Atual] - [Custo Novo]
+		formatString: \R\$ #,0
+		displayFolder: 1. Atual x Novo
+		lineageTag: a6179953-0416-402c-a56b-a1fffa738c26
+
+	measure 'Economia %' = DIVIDE ( [Economia], [Custo Atual] )
+		formatString: 0.0%
+		displayFolder: 1. Atual x Novo
+		lineageTag: 33b9f542-6d87-4342-9f08-28441df415ac
+
+	measure 'Economia Exames' = [Custo Exames Atual] - [Custo Exames Novo]
+		formatString: \R\$ #,0
+		displayFolder: 1. Atual x Novo
+		lineageTag: 313ba16e-aa19-4df1-b999-e1598591ac76
+
+	measure 'Economia Per Capita' = [Custo Per Capita Atual] - [Custo Per Capita Novo]
+		formatString: \R\$ #,0
+		displayFolder: 1. Atual x Novo
+		lineageTag: ff4229b7-73ac-4f9d-8624-38d91c855e29
+
+	measure 'Custo Atual Alfa' = CALCULATE ( [Custo Atual], dEmpresa[EMPRESA] = "EMPRESA ALFA" )
+		formatString: \R\$ #,0
+		displayFolder: 2. Por empresa
+		lineageTag: 2c8039bc-a30d-4599-bb9e-ff245b931dcd
+
+	measure 'Custo Atual Beta' = CALCULATE ( [Custo Atual], dEmpresa[EMPRESA] = "EMPRESA BETA" )
+		formatString: \R\$ #,0
+		displayFolder: 2. Por empresa
+		lineageTag: 47added7-43e4-4414-aa79-97a7b9ccdae3
+
+	/// Parte de exames em cada coluna do comparativo.
+	measure 'Parte Exames' =
+			SWITCH (
+			    SELECTEDVALUE ( dComparativo[ORDEM] ),
+			    1, CALCULATE ( [Custo Exames Atual], dEmpresa[EMPRESA] = "EMPRESA ALFA" ),
+			    2, CALCULATE ( [Custo Exames Atual], dEmpresa[EMPRESA] = "EMPRESA BETA" ),
+			    3, [Custo Exames Atual],
+			    4, [Custo Exames Novo]
+			)
+		formatString: \R\$ #,0
+		displayFolder: 2. Por empresa
+		lineageTag: 4bf6a95f-da5c-470b-9120-f5f66e98449e
+
+	/// Parte de per capita em cada coluna do comparativo.
+	measure 'Parte Per Capita' =
+			SWITCH (
+			    SELECTEDVALUE ( dComparativo[ORDEM] ),
+			    1, CALCULATE ( [Custo Per Capita Atual], dEmpresa[EMPRESA] = "EMPRESA ALFA" ),
+			    2, CALCULATE ( [Custo Per Capita Atual], dEmpresa[EMPRESA] = "EMPRESA BETA" ),
+			    3, [Custo Per Capita Atual],
+			    4, [Custo Per Capita Novo]
+			)
+		formatString: \R\$ #,0
+		displayFolder: 2. Por empresa
+		lineageTag: 482ac99e-c6ec-4dfe-8d1f-e3aac292f2d1
+
+	/// Custo total em cada cenário de tabela; respeita empresa, período e per capita.
+	measure 'Custo Cenário' =
+			VAR Cenario = SELECTEDVALUE ( dCenario[ORDEM] )
+			VAR Vidas = SUM ( dEmpresa[VIDAS] )
+			VAR PcAlfa = CALCULATE ( MAX ( dEmpresa[PER CAPITA ATUAL] ), dEmpresa[EMPRESA] = "EMPRESA ALFA" )
+			VAR PcBeta = CALCULATE ( MAX ( dEmpresa[PER CAPITA ATUAL] ), dEmpresa[EMPRESA] = "EMPRESA BETA" )
+			VAR ExAlfa = SUMX ( fExameEmpresa, fExameEmpresa[VOLUME MENSAL] * COALESCE ( fExameEmpresa[PREÇO ALFA], fExameEmpresa[PREÇO ATUAL] ) )
+			VAR ExBeta = SUMX ( fExameEmpresa, fExameEmpresa[VOLUME MENSAL] * COALESCE ( fExameEmpresa[PREÇO BETA], fExameEmpresa[PREÇO ATUAL] ) )
+			VAR ExMenor = SUMX ( fExameEmpresa, fExameEmpresa[VOLUME MENSAL] * fExameEmpresa[MENOR PREÇO] )
+			VAR Mensal =
+			    SWITCH (
+			        Cenario,
+			        1, [Exames Atual (mês)] + [Per Capita Atual (mês)] * [Inclui Per Capita],
+			        2, ExAlfa + Vidas * PcAlfa * [Inclui Per Capita],
+			        3, ExBeta + Vidas * PcBeta * [Inclui Per Capita],
+			        4, ExMenor + Vidas * MIN ( PcAlfa, PcBeta ) * [Inclui Per Capita],
+			        5, [Exames Novo (mês)] + [Per Capita Novo (mês)] * [Inclui Per Capita]
+			    )
+			RETURN
+			    Mensal * [Fator Período]
+		formatString: \R\$ #,0
+		displayFolder: 3. Cenários
+		lineageTag: 08158b7d-49a4-4864-b61b-cd97bf67f059
+
+	measure 'Variação vs Atual %' = DIVIDE ( [Custo Cenário] - [Custo Atual], [Custo Atual] )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 3. Cenários
+		lineageTag: ab41fda7-8b80-445c-bc99-ab79250ad5fd
+
+	/// Etapas do custo atual ao negociado; o total da cascata é o custo negociado.
+	measure 'Valor Ponte' =
+			VAR Etapa = SELECTEDVALUE ( dPonte[ORDEM] )
+			VAR Comum = SUMX ( FILTER ( fExameEmpresa, RELATED ( dExame[EMPRESAS QUE REALIZAM] ) = "Ambas" ), fExameEmpresa[VOLUME MENSAL] * ( fExameEmpresa[PREÇO ATUAL] - RELATED ( dExame[NOVO PREÇO] ) ) )
+			VAR SoAlfa = SUMX ( FILTER ( fExameEmpresa, RELATED ( dExame[EMPRESAS QUE REALIZAM] ) = "Só Alfa" ), fExameEmpresa[VOLUME MENSAL] * ( fExameEmpresa[PREÇO ATUAL] - RELATED ( dExame[NOVO PREÇO] ) ) )
+			VAR SoBeta = SUMX ( FILTER ( fExameEmpresa, RELATED ( dExame[EMPRESAS QUE REALIZAM] ) = "Só Beta" ), fExameEmpresa[VOLUME MENSAL] * ( fExameEmpresa[PREÇO ATUAL] - RELATED ( dExame[NOVO PREÇO] ) ) )
+			VAR PerCapita = SUMX ( dEmpresa, dEmpresa[VIDAS] * ( dEmpresa[PER CAPITA ATUAL] - dEmpresa[PER CAPITA NOVO] ) ) * [Inclui Per Capita]
+			RETURN
+			    SWITCH (
+			        Etapa,
+			        1, [Custo Atual],
+			        2, -Comum * [Fator Período],
+			        3, -SoAlfa * [Fator Período],
+			        4, -SoBeta * [Fator Período],
+			        5, -PerCapita * [Fator Período]
+			    )
+		formatString: \R\$ #,0
+		displayFolder: 3. Cenários
+		lineageTag: d09ed3b4-8338-445a-85ca-f69a2123eb48
+
+	measure 'Economia por Origem' = IF ( SELECTEDVALUE ( dPonte[ORDEM] ) > 1, - [Valor Ponte] )
+		formatString: \R\$ #,0
+		displayFolder: 3. Cenários
+		lineageTag: cc4ec7b6-a4c7-461b-a2b4-021447673440
+
+	measure 'Preço Tabela Alfa' = CALCULATE ( MAX ( fExameEmpresa[PREÇO ATUAL] ), dEmpresa[EMPRESA] = "EMPRESA ALFA" )
+		formatString: \R\$ #,0.00
+		displayFolder: 4. Preços e rede
+		lineageTag: 5d640c05-53fa-4819-bb2e-33dbd7b2992b
+
+	measure 'Preço Tabela Beta' = CALCULATE ( MAX ( fExameEmpresa[PREÇO ATUAL] ), dEmpresa[EMPRESA] = "EMPRESA BETA" )
+		formatString: \R\$ #,0.00
+		displayFolder: 4. Preços e rede
+		lineageTag: f5041a5b-a4ac-445c-92ac-b4232487aad9
+
+	measure 'Preço Negociado' = MAX ( dExame[NOVO PREÇO] )
+		formatString: \R\$ #,0.00
+		displayFolder: 4. Preços e rede
+		lineageTag: b08f6774-2955-4868-885e-311095965041
+
+	/// Preço médio ponderado pelo volume.
+	measure 'Preço Médio Alfa' =
+			DIVIDE (
+			    CALCULATE ( [Exames Atual (mês)], dEmpresa[EMPRESA] = "EMPRESA ALFA" ),
+			    CALCULATE ( [Volume do Mês], dEmpresa[EMPRESA] = "EMPRESA ALFA" )
+			)
+		formatString: \R\$ #,0.00
+		displayFolder: 4. Preços e rede
+		lineageTag: 41cea346-e4e4-45dc-80e7-0906062cf34a
+
+	measure 'Preço Médio Beta' =
+			DIVIDE (
+			    CALCULATE ( [Exames Atual (mês)], dEmpresa[EMPRESA] = "EMPRESA BETA" ),
+			    CALCULATE ( [Volume do Mês], dEmpresa[EMPRESA] = "EMPRESA BETA" )
+			)
+		formatString: \R\$ #,0.00
+		displayFolder: 4. Preços e rede
+		lineageTag: 1f0cd308-be55-41b5-becd-7041b929859e
+
+	measure 'Preço Médio Negociado' = DIVIDE ( [Exames Novo (mês)], [Volume do Mês] )
+		formatString: \R\$ #,0.00
+		displayFolder: 4. Preços e rede
+		lineageTag: 37dc52a0-8b0d-49d5-933d-1b0f680c9cef
+
+	measure 'Diferença Beta vs Alfa %' =
+			VAR A = [Preço Tabela Alfa]
+			VAR B = [Preço Tabela Beta]
+			RETURN
+			    IF ( NOT ISBLANK ( A ) && NOT ISBLANK ( B ), DIVIDE ( B - A, A ) )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 4. Preços e rede
+		lineageTag: 304afec7-4cb8-4ba0-b7d0-f9fa840aa124
+
+	measure 'Redução vs Menor Preço %' =
+			VAR A = [Preço Tabela Alfa]
+			VAR B = [Preço Tabela Beta]
+			VAR Menor = IF ( ISBLANK ( A ), B, IF ( ISBLANK ( B ), A, MIN ( A, B ) ) )
+			RETURN
+			    DIVIDE ( Menor - [Preço Negociado], Menor )
+		formatString: 0.0%
+		displayFolder: 4. Preços e rede
+		lineageTag: 52f79abb-28a2-49e7-9e4e-9bcd6633bd80
+
+	measure 'Exames Reduzidos' = CALCULATE ( [Qtd Exames], dExame[SITUAÇÃO DA NEGOCIAÇÃO] = "Reduzido" )
+		formatString: #,0
+		displayFolder: 5. Negociação
+		lineageTag: dd7dee62-b099-415e-a1cc-310d892b3e41
+
+	measure 'Exames sem Negociação' = CALCULATE ( [Qtd Exames], dExame[SITUAÇÃO DA NEGOCIAÇÃO] = "Sem negociação" )
+		formatString: #,0
+		displayFolder: 5. Negociação
+		lineageTag: 8119f866-1ed6-47c4-b7fb-09173a9a8a94
+
+	/// Custo dos exames que mantiveram preço: onde ainda há espaço para negociar.
+	measure 'Custo Novo sem Negociação' = CALCULATE ( [Custo Exames Novo], dExame[SITUAÇÃO DA NEGOCIAÇÃO] = "Sem negociação" )
+		formatString: \R\$ #,0
+		displayFolder: 5. Negociação
+		lineageTag: cb3fef9e-e959-401a-aa9b-ce536cb322ce
+
+	measure 'Qtd Exames Exclusivos' = CALCULATE ( [Qtd Exames], dExame[EMPRESAS QUE REALIZAM] <> "Ambas" )
+		formatString: #,0
+		displayFolder: 5. Negociação
+		lineageTag: 5de3ae39-ea57-4e49-96bd-60426073ef80
+
+	measure 'Qtd Exames em Comum' = CALCULATE ( [Qtd Exames], dExame[EMPRESAS QUE REALIZAM] = "Ambas" )
+		formatString: #,0
+		displayFolder: 5. Negociação
+		lineageTag: 40e2eb2c-203f-48cb-9309-182623c9fb73
+
+	measure 'Custo Exclusivos Atual' = CALCULATE ( [Custo Exames Atual], dExame[EMPRESAS QUE REALIZAM] <> "Ambas" )
+		formatString: \R\$ #,0
+		displayFolder: 5. Negociação
+		lineageTag: 253743bd-944d-4774-98f2-dcea9c4f589e
+
+	measure 'Custo Exclusivos Novo' = CALCULATE ( [Custo Exames Novo], dExame[EMPRESAS QUE REALIZAM] <> "Ambas" )
+		formatString: \R\$ #,0
+		displayFolder: 5. Negociação
+		lineageTag: 219dc558-fbf2-4637-b6b3-3cb7adcb82be
+
+	measure 'Economia Exames em Comum' = CALCULATE ( [Economia Exames], dExame[EMPRESAS QUE REALIZAM] = "Ambas" )
+		formatString: \R\$ #,0
+		displayFolder: 5. Negociação
+		lineageTag: f6a94866-2656-4482-8c31-d3eb9257025d
+
+	measure 'Top N' = SELECTEDVALUE ( dTopN[N], 10 )
+		formatString: 0
+		displayFolder: 6. Ranking
+		lineageTag: 071f3524-8348-4ee0-98ae-c0f86774319b
+
+	measure 'Ranking Custo Novo' =
+			IF (
+			    NOT ISBLANK ( [Custo Exames Novo] ),
+			    RANKX ( ALL ( dExame[EXAME], dExame[GRUPO] ), [Custo Exames Novo], , DESC, DENSE )
+			)
+		formatString: 0
+		displayFolder: 6. Ranking
+		lineageTag: 916c0fb4-81d0-4130-a356-f448d82dee08
+
+	measure 'Custo Novo Top N' = IF ( [Ranking Custo Novo] <= [Top N], [Custo Exames Novo] )
+		formatString: \R\$ #,0
+		displayFolder: 6. Ranking
+		lineageTag: 9544c84c-ba0b-4969-91e0-b5138cedae5a
+
+	/// Curva de Pareto dos exames.
+	measure '% Acumulado Top N' =
+			VAR Valor = [Custo Exames Novo]
+			VAR Total = CALCULATE ( [Custo Exames Novo], ALL ( dExame ) )
+			VAR Acumulado =
+			    SUMX ( FILTER ( ALL ( dExame[EXAME], dExame[GRUPO] ), [Custo Exames Novo] >= Valor ), [Custo Exames Novo] )
+			RETURN
+			    IF ( [Ranking Custo Novo] <= [Top N], DIVIDE ( Acumulado, Total ) )
+		formatString: 0.0%
+		displayFolder: 6. Ranking
+		lineageTag: b7d48640-d577-4bc3-9b72-33ee7eed4d7a
+
+	measure '% do Total Top N' =
+			IF (
+			    [Ranking Custo Novo] <= [Top N],
+			    DIVIDE ( [Custo Exames Novo], CALCULATE ( [Custo Exames Novo], ALL ( dExame ) ) )
+			)
+		formatString: 0.0%
+		displayFolder: 6. Ranking
+		lineageTag: fc71e500-5366-4272-8599-3892062f6c27
+
+	/// Parte do custo concentrada nos N exames mais caros.
+	measure 'Concentração Top N' =
+			DIVIDE (
+			    SUMX ( FILTER ( ALL ( dExame[EXAME], dExame[GRUPO] ), [Ranking Custo Novo] <= [Top N] ), [Custo Exames Novo] ),
+			    CALCULATE ( [Custo Exames Novo], ALL ( dExame ) )
+			)
+		formatString: 0.0%
+		displayFolder: 6. Ranking
+		lineageTag: f3cac231-dfcd-4e90-acd5-b45d741f6a0f
+
+	column Value
+		isHidden
+		formatString: 0
+		lineageTag: 1828fb10-ec88-46bc-a943-cb7b9fa796ba
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Medidas = calculated
+		mode: import
+		source = {0}
+
+	annotation PBI_Id = 989204d175c144338bd069738f9453b2
+

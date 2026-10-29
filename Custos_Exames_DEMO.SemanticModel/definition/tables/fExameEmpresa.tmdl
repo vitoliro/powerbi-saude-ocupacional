@@ -1,0 +1,84 @@
+/// Fato: volume mensal e preço atual por empresa e exame.
+table fExameEmpresa
+	lineageTag: 86a78ab6-01c4-498e-9ac1-18a5ab4a0cdb
+
+	column EMPRESA
+		dataType: string
+		lineageTag: 65a204ce-c5c6-4ed7-94f0-a9d700b26fb6
+		summarizeBy: none
+		sourceColumn: EMPRESA
+
+		annotation SummarizationSetBy = Automatic
+
+	column ID_EXAME
+		dataType: string
+		lineageTag: 319720cb-2410-4544-b2fe-30fb65c16554
+		summarizeBy: none
+		sourceColumn: ID_EXAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'VOLUME MENSAL'
+		dataType: int64
+		formatString: 0
+		lineageTag: 721d8380-fe28-4f2b-8e23-43ae2e9a6ed4
+		summarizeBy: none
+		sourceColumn: VOLUME MENSAL
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'PREÇO ATUAL'
+		dataType: double
+		lineageTag: 2a35d5a8-be02-4cc8-9368-8380574be439
+		summarizeBy: none
+		sourceColumn: PREÇO ATUAL
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'PREÇO ALFA'
+		dataType: double
+		isHidden
+		lineageTag: be0a52d5-eebe-45e5-ad10-783e73dd9130
+		summarizeBy: none
+		sourceColumn: PREÇO ALFA
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'PREÇO BETA'
+		dataType: double
+		isHidden
+		lineageTag: ef9c8bfd-6bed-43d3-8291-65082658453a
+		summarizeBy: none
+		sourceColumn: PREÇO BETA
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'MENOR PREÇO'
+		dataType: double
+		isHidden
+		lineageTag: fd9ff4f6-0d9f-40c0-b024-f510f4cd36c8
+		summarizeBy: none
+		sourceColumn: MENOR PREÇO
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fExameEmpresa = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(PastaDados & "Base_Custos_Exames_DEMO.xlsx"), null, true),
+				    Volume = Table.TransformColumnTypes(Fonte{[Item="fVolume",Kind="Table"]}[Data], {{"EMPRESA", type text}, {"ID_EXAME", type text}, {"VOLUME MENSAL", Int64.Type}}),
+				    Preco = Table.TransformColumnTypes(Fonte{[Item="fPreco",Kind="Table"]}[Data], {{"EMPRESA", type text}, {"ID_EXAME", type text}, {"PREÇO ATUAL", type number}}),
+				    ComPreco = Table.NestedJoin(Volume, {"EMPRESA", "ID_EXAME"}, Preco, {"EMPRESA", "ID_EXAME"}, "P", JoinKind.LeftOuter),
+				    Fato = Table.ExpandTableColumn(ComPreco, "P", {"PREÇO ATUAL"}),
+				    PrecoDe = (empresa as text, id as text) as nullable number =>
+				        let Linhas = Table.SelectRows(Preco, each [EMPRESA] = empresa and [ID_EXAME] = id)
+				        in if Table.IsEmpty(Linhas) then null else Linhas{0}[PREÇO ATUAL],
+				    ComAlfa = Table.AddColumn(Fato, "PREÇO ALFA", each PrecoDe("EMPRESA ALFA", [ID_EXAME]), type number),
+				    ComBeta = Table.AddColumn(ComAlfa, "PREÇO BETA", each PrecoDe("EMPRESA BETA", [ID_EXAME]), type number),
+				    Menor = Table.AddColumn(ComBeta, "MENOR PREÇO", each List.Min(List.RemoveNulls({[PREÇO ALFA], [PREÇO BETA]})), type number)
+				in
+				    Menor
+
+	annotation PBI_ResultType = Table
+

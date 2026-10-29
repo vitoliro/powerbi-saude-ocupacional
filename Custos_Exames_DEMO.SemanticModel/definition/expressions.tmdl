@@ -1,0 +1,5 @@
+expression PastaDados = "C:\Portfolio-SSO\dados\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 3ca4a8a5-900b-4ce6-9caf-ddcbd49c551c
+
+	annotation PBI_ResultType = Text
+

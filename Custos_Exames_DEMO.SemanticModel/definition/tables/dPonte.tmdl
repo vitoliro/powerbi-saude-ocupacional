@@ -1,0 +1,32 @@
+table dPonte
+	lineageTag: 0e350226-235a-4abc-8fd6-f077191f3fc2
+
+	column ETAPA
+		dataType: string
+		lineageTag: 7c4fe70d-4422-4d72-a635-48c8a36b3337
+		summarizeBy: none
+		sourceColumn: ETAPA
+		sortByColumn: ORDEM
+
+		annotation SummarizationSetBy = Automatic
+
+	column ORDEM
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 2aaf7b3a-dfd8-44a6-840d-536cdea091a6
+		summarizeBy: none
+		sourceColumn: ORDEM
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dPonte = m
+		mode: import
+		source =
+				let
+				    Fonte = #table(type table [#"ETAPA" = text, #"ORDEM" = Int64.Type], {{"Custo atual", 1}, {"Exames em comum", 2}, {"Exclusivos da Alfa", 3}, {"Exclusivos da Beta", 4}, {"Per capita por vida", 5}})
+				in
+				    Fonte
+
+	annotation PBI_ResultType = Table
+

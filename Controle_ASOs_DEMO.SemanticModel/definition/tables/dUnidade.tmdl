@@ -1,0 +1,21 @@
+table dUnidade
+	lineageTag: 81145efe-ca30-44bd-8834-3d1a13997b51
+
+	column 'UNIDADE DE NEGÓCIO'
+		dataType: string
+		lineageTag: e53f2bd7-e7e9-48e5-b65a-b61221b226ea
+		summarizeBy: none
+		sourceColumn: UNIDADE DE NEGÓCIO
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dUnidade = m
+		mode: import
+		source =
+				let
+				    Fonte = Table.Distinct(Table.SelectColumns(tblASOS, {"UNIDADE DE NEGÓCIO"}))
+				in
+				    Fonte
+
+	annotation PBI_ResultType = Table
+

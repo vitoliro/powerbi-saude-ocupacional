@@ -1,0 +1,48 @@
+relationship 52a7a851-66fd-41ed-99cd-347d6bf8bd18
+	fromColumn: tblASOS.EMPRESA
+	toColumn: dEmpresa.EMPRESA
+
+relationship 58d753c7-4073-4457-9d31-d7e61c396b06
+	fromColumn: tblASOS.'UNIDADE DE NEGÓCIO'
+	toColumn: dUnidade.'UNIDADE DE NEGÓCIO'
+
+relationship 98d42642-f684-4d41-9b40-1e9cbf88d87b
+	fromColumn: tblASOS.'FAIXA 90D'
+	toColumn: dFaixa.FAIXA
+
+relationship af8b48e3-d427-4837-9a3f-7ed438f58055
+	fromColumn: tblASOS.'SITUAÇÃO AGENDAMENTO'
+	toColumn: dSituacao.SITUAÇÃO
+
+relationship 638fa55a-5eff-4ee3-943c-8a61f40572d7
+	fromColumn: tblRealizados.EMPRESA
+	toColumn: dEmpresa.EMPRESA
+
+relationship 996201be-baa0-4941-9257-80bd176fca6c
+	fromColumn: tblRealizados.'UNIDADE DE NEGÓCIO'
+	toColumn: dUnidade.'UNIDADE DE NEGÓCIO'
+
+relationship 2c28f5bc-8d5d-42ad-9709-2c69ecdf4ab7
+	fromColumn: tblRealizados.'FAIXA DE ANTECIPAÇÃO'
+	toColumn: dFaixaAntecipacao.FAIXA
+
+relationship 624243e9-328f-49fa-a174-0da0ba87a104
+	fromColumn: tblFaltas.EMPRESA
+	toColumn: dEmpresa.EMPRESA
+
+relationship 2f224b1e-4298-47bf-a1e6-ddae24b61f75
+	fromColumn: tblFaltas.'UNIDADE DE NEGÓCIO'
+	toColumn: dUnidade.'UNIDADE DE NEGÓCIO'
+
+relationship 191248b9-e520-4fa6-94c7-da92eb671095
+	fromColumn: tblDesligados.EMPRESA
+	toColumn: dEmpresa.EMPRESA
+
+relationship a65d25c2-8ab9-45c3-9f64-75ae04008e7c
+	fromColumn: tblDesligados.'UNIDADE DE NEGÓCIO'
+	toColumn: dUnidade.'UNIDADE DE NEGÓCIO'
+
+relationship 1981fbf5-55be-4c40-8baf-150f2caba6f4
+	fromColumn: tblHistorico.'UNIDADE DE NEGÓCIO'
+	toColumn: dUnidade.'UNIDADE DE NEGÓCIO'
+

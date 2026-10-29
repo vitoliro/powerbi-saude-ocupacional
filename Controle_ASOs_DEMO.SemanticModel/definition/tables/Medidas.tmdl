@@ -1,0 +1,181 @@
+/// Tabela só de medidas
+table Medidas
+	lineageTag: a9fedd6b-b553-4519-99dd-de458363c3cb
+
+	/// Ativos, em férias ou licença remunerada; afastados e exceções ficam fora.
+	measure 'Colaboradores na Base' = CALCULATE ( COUNTROWS ( tblASOS ), tblASOS[NA BASE] = TRUE () )
+		formatString: #,0
+		displayFolder: 1. Vencimentos
+		lineageTag: 0a4819f7-4b22-46cd-85dd-d28cc905ca8c
+
+	/// ASOs vencidos ou que vencem nos próximos 90 dias, na base de cálculo.
+	measure 'Vencimentos 90d' =
+			CALCULATE (
+			    COUNTROWS ( tblASOS ),
+			    tblASOS[NA BASE] = TRUE (),
+			    tblASOS[DIAS PARA VENCER] <= 90
+			)
+		formatString: #,0
+		displayFolder: 1. Vencimentos
+		lineageTag: 6e98de4f-8970-4c29-841a-a37c34a19810
+
+	measure 'ASOs Vencidos' = CALCULATE ( [Vencimentos 90d], tblASOS[FAIXA 90D] = "Vencido" )
+		formatString: #,0
+		displayFolder: 1. Vencimentos
+		lineageTag: 23de630d-a024-4b5a-befc-847342084533
+
+	measure 'ASOs Agendados' = CALCULATE ( [Vencimentos 90d], tblASOS[SITUAÇÃO AGENDAMENTO] = "Agendado" )
+		formatString: #,0
+		displayFolder: 1. Vencimentos
+		lineageTag: 1a285dd2-4465-421d-bad6-ae1c73c1395d
+
+	/// Exame feito, ASO novo ainda não lançado na base.
+	measure 'Realizados a Atualizar' = CALCULATE ( [Vencimentos 90d], tblASOS[SITUAÇÃO AGENDAMENTO] = "Realizado" )
+		formatString: #,0
+		displayFolder: 1. Vencimentos
+		lineageTag: eb29e965-a760-4a87-ab98-6e2ecef0b3f3
+
+	measure 'Sem Agendamento' = CALCULATE ( [Vencimentos 90d], tblASOS[SITUAÇÃO AGENDAMENTO] = "Sem agendamento" )
+		formatString: #,0
+		displayFolder: 1. Vencimentos
+		lineageTag: bfebf6d8-5b0a-4337-8bf3-ff1af196a39e
+
+	/// Parte dos vencimentos em 90 dias que já tem exame agendado ou realizado.
+	measure '% Cobertura' = DIVIDE ( [ASOs Agendados] + [Realizados a Atualizar], [Vencimentos 90d] )
+		formatString: 0.0%
+		displayFolder: 1. Vencimentos
+		lineageTag: d3eb9be2-8409-4776-af45-bc5f27783c47
+
+	/// Sem agendamento e vencendo em até 30 dias (ou já vencidos).
+	measure 'Pendentes Críticos' =
+			CALCULATE (
+			    COUNTROWS ( tblASOS ),
+			    tblASOS[NA BASE] = TRUE (),
+			    tblASOS[SITUAÇÃO AGENDAMENTO] = "Sem agendamento",
+			    tblASOS[DIAS PARA VENCER] <= 30
+			)
+		formatString: #,0
+		displayFolder: 1. Vencimentos
+		lineageTag: 39412d98-ba76-4cfa-902c-ae19222f4b9a
+
+	/// Usada na lista de pendências: só aparece para quem está pendente.
+	measure 'Dias até Vencer (pendente)' = IF ( [Pendentes Críticos] > 0, MIN ( tblASOS[DIAS PARA VENCER] ) )
+		formatString: #,0
+		displayFolder: 1. Vencimentos
+		lineageTag: d80d98df-6ab3-49e3-8638-6a0f7de6dca6
+
+	measure 'Vencidos (semanal)' = SUM ( tblHistorico[VENCIDOS] )
+		formatString: #,0
+		displayFolder: 2. Histórico
+		lineageTag: ec0ec0a4-92ff-42ce-b4d9-d23eb90e1e91
+
+	measure '% Cobertura (semanal)' =
+			DIVIDE (
+			    SUM ( tblHistorico[AGENDADOS] ) + SUM ( tblHistorico[REALIZADOS] ),
+			    SUM ( tblHistorico[VENCIMENTOS 90 DIAS] )
+			)
+		formatString: 0.0%
+		displayFolder: 2. Histórico
+		lineageTag: 1a8e5f98-283a-4caa-b949-6090d46b9dfc
+
+	measure 'ASOs Realizados' = COUNTROWS ( tblRealizados )
+		formatString: #,0
+		displayFolder: 3. Antecipação
+		lineageTag: f59fea30-5bf6-4f2a-8b73-4799db6c4fd6
+
+	/// Dias entre o exame e o vencimento anterior; negativo quando já estava vencido.
+	measure 'Antecipação Média (dias)' = AVERAGE ( tblRealizados[DIAS ANTECIPADOS] )
+		formatString: #,0
+		displayFolder: 3. Antecipação
+		lineageTag: 7584cc57-607d-4e99-af49-1194dd4186bc
+
+	measure 'Realizados Já Vencidos' = CALCULATE ( COUNTROWS ( tblRealizados ), tblRealizados[DIAS ANTECIPADOS] < 0 )
+		formatString: #,0
+		displayFolder: 3. Antecipação
+		lineageTag: b5f87e06-8616-47a9-bfe4-1c076ce9dbe2
+
+	measure '% Realizado Já Vencido' = DIVIDE ( [Realizados Já Vencidos], [ASOs Realizados] )
+		formatString: 0.0%
+		displayFolder: 3. Antecipação
+		lineageTag: 03217b08-e7a8-4617-8dcb-03c63fd2f8e8
+
+	measure 'Antecipação Agendados (dias)' = CALCULATE ( AVERAGE ( tblASOS[DIAS ANTECIPAÇÃO AGENDADO] ), tblASOS[NA BASE] = TRUE () )
+		formatString: #,0
+		displayFolder: 3. Antecipação
+		lineageTag: 2bd87a5c-b08f-42ad-b820-983c0dbc0ce2
+
+	measure 'Total de Faltas' = COUNTROWS ( tblFaltas )
+		formatString: #,0
+		displayFolder: 4. Faltas
+		lineageTag: def60e80-9bf1-4b7e-881d-26e5930dcd9a
+
+	measure 'Pessoas que Faltaram' = DISTINCTCOUNT ( tblFaltas[CPF] )
+		formatString: #,0
+		displayFolder: 4. Faltas
+		lineageTag: 57a7e10e-9e07-4e04-9828-1fb653b1cd38
+
+	/// Colaboradores com duas faltas ou mais no período.
+	measure 'Reincidentes 2+' =
+			COUNTROWS (
+			    FILTER (
+			        VALUES ( tblFaltas[CPF] ),
+			        CALCULATE ( COUNTROWS ( tblFaltas ) ) >= 2
+			    )
+			)
+		formatString: #,0
+		displayFolder: 4. Faltas
+		lineageTag: 03a4f923-2c82-4f9d-a53c-cd74f54b288c
+
+	measure '% Reincidentes' = DIVIDE ( [Reincidentes 2+], [Pessoas que Faltaram] )
+		formatString: 0.0%
+		displayFolder: 4. Faltas
+		lineageTag: 42bc334e-895a-435b-b3e4-5325615d3153
+
+	measure 'Faltas em Demissional' = CALCULATE ( [Total de Faltas], tblFaltas[TIPO DE EXAME] = "DEMISSIONAL" )
+		formatString: #,0
+		displayFolder: 4. Faltas
+		lineageTag: de675170-02a8-4077-9ff9-6180cb65101f
+
+	/// Registrados automaticamente pelo fluxo que lê o comunicado de desligamento.
+	measure 'Desligamentos Registrados' = COUNTROWS ( tblDesligados )
+		formatString: #,0
+		displayFolder: 5. Desligamentos
+		lineageTag: 74d0fc70-2791-47db-80b5-db6d24580dbd
+
+	measure 'Desligamentos por Dia Útil' =
+			VAR Inicio = MIN ( tblDesligados[DATA DE DESLIGAMENTO] )
+			VAR Fim = MAX ( tblDesligados[DATA DE DESLIGAMENTO] )
+			RETURN
+			    IF (
+			        NOT ISBLANK ( Inicio ),
+			        DIVIDE (
+			            [Desligamentos Registrados],
+			            COUNTROWS ( FILTER ( CALENDAR ( Inicio, Fim ), WEEKDAY ( [Date], 2 ) < 6 ) )
+			        )
+			    )
+		formatString: #,0.0
+		displayFolder: 5. Desligamentos
+		lineageTag: 5e4c4938-dd21-4347-91f5-ca15d8ce3a6d
+
+	/// Estimativa: cerca de 12 minutos de trabalho manual por desligamento.
+	measure 'Horas Manuais Evitadas' = [Desligamentos Registrados] * 12 / 60
+		formatString: #,0
+		displayFolder: 5. Desligamentos
+		lineageTag: e0d8ffda-4a13-4a66-b960-7e4337abe5f9
+
+	column Value
+		isHidden
+		formatString: 0
+		lineageTag: a3e8616f-34c2-4ffe-9925-746292f1ba69
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Medidas = calculated
+		mode: import
+		source = {0}
+
+	annotation PBI_Id = 405a6b42e425487e9a5464c745ff4285
+

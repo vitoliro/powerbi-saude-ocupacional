@@ -1,0 +1,22 @@
+table dTopN
+	lineageTag: 10ec5187-a71d-48a0-9723-51271fbec206
+
+	column N
+		dataType: int64
+		formatString: 0
+		lineageTag: 3238cc40-54af-49de-899d-7e41caabaabb
+		summarizeBy: none
+		sourceColumn: N
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dTopN = m
+		mode: import
+		source =
+				let
+				    Fonte = #table(type table [#"N" = Int64.Type], {{5}, {10}, {15}, {20}})
+				in
+				    Fonte
+
+	annotation PBI_ResultType = Table
+

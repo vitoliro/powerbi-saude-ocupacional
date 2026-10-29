@@ -1,0 +1,31 @@
+table tblPremissas
+	lineageTag: 8c9f2bae-d45b-4d6b-8b93-b5748574fbf2
+
+	column ITEM
+		dataType: string
+		lineageTag: 9c53abfa-a6f6-440c-a618-1a88105ace3f
+		summarizeBy: none
+		sourceColumn: ITEM
+
+		annotation SummarizationSetBy = Automatic
+
+	column REGRA
+		dataType: string
+		lineageTag: 6124b90c-773a-4950-89f9-a57e19ed7b94
+		summarizeBy: none
+		sourceColumn: REGRA
+
+		annotation SummarizationSetBy = Automatic
+
+	partition tblPremissas = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(PastaDados & "Base_Custos_Exames_DEMO.xlsx"), null, true),
+				    Tabela = Fonte{[Item="tblPremissas",Kind="Table"]}[Data],
+				    Tipos = Table.TransformColumnTypes(Tabela, {{"ITEM", type text}, {"REGRA", type text}})
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,48 @@
+table dEmpresa
+	lineageTag: 1dfaf5d1-788d-4e35-9511-60465cc1166e
+
+	column EMPRESA
+		dataType: string
+		lineageTag: 58c709c5-2f1e-4294-947f-3673c85947a3
+		summarizeBy: none
+		sourceColumn: EMPRESA
+
+		annotation SummarizationSetBy = Automatic
+
+	column VIDAS
+		dataType: int64
+		formatString: 0
+		lineageTag: d759a169-14af-46b2-adee-89648421b77d
+		summarizeBy: none
+		sourceColumn: VIDAS
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'PER CAPITA ATUAL'
+		dataType: double
+		lineageTag: 55aca60a-3504-4c15-b19e-18edcac2cc2b
+		summarizeBy: none
+		sourceColumn: PER CAPITA ATUAL
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'PER CAPITA NOVO'
+		dataType: double
+		lineageTag: 9c432914-383c-456b-a2de-8502dc480499
+		summarizeBy: none
+		sourceColumn: PER CAPITA NOVO
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dEmpresa = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(PastaDados & "Base_Custos_Exames_DEMO.xlsx"), null, true),
+				    Tabela = Fonte{[Item="dEmpresa",Kind="Table"]}[Data],
+				    Tipos = Table.TransformColumnTypes(Tabela, {{"EMPRESA", type text}, {"VIDAS", Int64.Type}, {"PER CAPITA ATUAL", type number}, {"PER CAPITA NOVO", type number}})
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

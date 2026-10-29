@@ -1,0 +1,29 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: pt-BR
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["PastaDados","DataReferencia","tblASOS","tblRealizados","tblFaltas","tblDesligados","tblHistorico","dEmpresa","dUnidade","dFaixa","dFaixaAntecipacao","dSituacao"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table tblASOS
+ref table tblRealizados
+ref table tblFaltas
+ref table tblDesligados
+ref table tblHistorico
+ref table dEmpresa
+ref table dUnidade
+ref table dFaixa
+ref table dFaixaAntecipacao
+ref table dSituacao
+ref table Medidas
+
+ref cultureInfo pt-BR
+

@@ -1,0 +1,21 @@
+table dEmpresa
+	lineageTag: d55a1537-a9d5-4bd0-9b4f-b6331f78e40c
+
+	column EMPRESA
+		dataType: string
+		lineageTag: a80976ed-ac07-4efe-ba5b-5a14113a1d3e
+		summarizeBy: none
+		sourceColumn: EMPRESA
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dEmpresa = m
+		mode: import
+		source =
+				let
+				    Fonte = Table.Distinct(Table.SelectColumns(tblASOS, {"EMPRESA"}))
+				in
+				    Fonte
+
+	annotation PBI_ResultType = Table
+

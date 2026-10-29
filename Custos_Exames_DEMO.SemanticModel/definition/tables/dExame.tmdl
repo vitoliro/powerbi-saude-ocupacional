@@ -1,0 +1,82 @@
+/// Catálogo de exames com o novo preço negociado.
+table dExame
+	lineageTag: 93d73da9-07c0-408b-b4f3-908d8e1fc541
+
+	column ID_EXAME
+		dataType: string
+		lineageTag: 61ea8073-f9b9-4fce-9d29-ec4fec18c31b
+		summarizeBy: none
+		sourceColumn: ID_EXAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column EXAME
+		dataType: string
+		lineageTag: 2557c33e-0463-439c-9326-ac3625b8b841
+		summarizeBy: none
+		sourceColumn: EXAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column GRUPO
+		dataType: string
+		lineageTag: c375a49e-84b2-494c-9f7e-9c6dfc0ce2de
+		summarizeBy: none
+		sourceColumn: GRUPO
+
+		annotation SummarizationSetBy = Automatic
+
+	column REDE
+		dataType: string
+		lineageTag: 14da5524-732d-4b40-86b5-5519bf9c0332
+		summarizeBy: none
+		sourceColumn: REDE
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'NOVO PREÇO'
+		dataType: double
+		lineageTag: 553b8286-cacf-43d7-acd5-fc0bbff00120
+		summarizeBy: none
+		sourceColumn: NOVO PREÇO
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'SITUAÇÃO DA NEGOCIAÇÃO'
+		dataType: string
+		lineageTag: 58529995-707b-4b7d-a871-b83558eeb431
+		summarizeBy: none
+		sourceColumn: SITUAÇÃO DA NEGOCIAÇÃO
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'EMPRESAS QUE REALIZAM'
+		dataType: string
+		lineageTag: c4702d48-39c7-458b-87c5-985831178cc4
+		summarizeBy: none
+		sourceColumn: EMPRESAS QUE REALIZAM
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dExame = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(PastaDados & "Base_Custos_Exames_DEMO.xlsx"), null, true),
+				    Exames = Table.TransformColumnTypes(Fonte{[Item="dExame",Kind="Table"]}[Data], {{"ID_EXAME", type text}, {"EXAME", type text}, {"GRUPO", type text}, {"REDE", type text}}),
+				    Novo = Table.TransformColumnTypes(Fonte{[Item="fNovoPreco",Kind="Table"]}[Data], {{"ID_EXAME", type text}, {"NOVO PREÇO", type number}, {"SITUAÇÃO DA NEGOCIAÇÃO", type text}}),
+				    Volume = Table.TransformColumnTypes(Fonte{[Item="fVolume",Kind="Table"]}[Data], {{"EMPRESA", type text}, {"ID_EXAME", type text}}),
+				    ComNovo = Table.NestedJoin(Exames, {"ID_EXAME"}, Novo, {"ID_EXAME"}, "N", JoinKind.LeftOuter),
+				    Expandido = Table.ExpandTableColumn(ComNovo, "N", {"NOVO PREÇO", "SITUAÇÃO DA NEGOCIAÇÃO"}),
+				    Empresas = Table.AddColumn(Expandido, "EMPRESAS QUE REALIZAM", (linha) =>
+				        let
+				            Lista = Table.SelectRows(Volume, each [ID_EXAME] = linha[ID_EXAME])[EMPRESA],
+				            TemAlfa = List.Contains(Lista, "EMPRESA ALFA"),
+				            TemBeta = List.Contains(Lista, "EMPRESA BETA")
+				        in
+				            if TemAlfa and TemBeta then "Ambas" else if TemAlfa then "Só Alfa" else "Só Beta", type text)
+				in
+				    Empresas
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,32 @@
+table dCenario
+	lineageTag: a7eb84dc-e039-401f-9ccb-16ec73c628da
+
+	column CENÁRIO
+		dataType: string
+		lineageTag: 51a2ddb7-e78d-46c0-8c67-81ac3ec6df86
+		summarizeBy: none
+		sourceColumn: CENÁRIO
+		sortByColumn: ORDEM
+
+		annotation SummarizationSetBy = Automatic
+
+	column ORDEM
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 056c639d-88a1-4096-afb5-471b4e13cdbd
+		summarizeBy: none
+		sourceColumn: ORDEM
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dCenario = m
+		mode: import
+		source =
+				let
+				    Fonte = #table(type table [#"CENÁRIO" = text, #"ORDEM" = Int64.Type], {{"Atual (contratos separados)", 1}, {"Tabela da Alfa para todos", 2}, {"Tabela da Beta para todos", 3}, {"Menor preço entre tabelas", 4}, {"Novo preço negociado", 5}})
+				in
+				    Fonte
+
+	annotation PBI_ResultType = Table
+

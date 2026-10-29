@@ -1,0 +1,32 @@
+table dSituacao
+	lineageTag: a0375447-ffdb-40ee-9ecf-118d48107981
+
+	column SITUAÇÃO
+		dataType: string
+		lineageTag: 13560655-c87e-42ce-9b19-628f55e5f5fd
+		summarizeBy: none
+		sourceColumn: SITUAÇÃO
+		sortByColumn: ORDEM
+
+		annotation SummarizationSetBy = Automatic
+
+	column ORDEM
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: dd8cf84e-71eb-4f31-baeb-db74b0e295c5
+		summarizeBy: none
+		sourceColumn: ORDEM
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dSituacao = m
+		mode: import
+		source =
+				let
+				    Fonte = #table(type table [#"SITUAÇÃO" = text, #"ORDEM" = Int64.Type], {{"Realizado", 1}, {"Agendado", 2}, {"Sem agendamento", 3}})
+				in
+				    Fonte
+
+	annotation PBI_ResultType = Table
+

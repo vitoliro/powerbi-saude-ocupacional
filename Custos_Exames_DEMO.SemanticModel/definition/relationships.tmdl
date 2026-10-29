@@ -1,0 +1,8 @@
+relationship f7271a05-7858-41b7-9cc9-0289ea918e0a
+	fromColumn: fExameEmpresa.ID_EXAME
+	toColumn: dExame.ID_EXAME
+
+relationship 23d19509-d377-41b0-827c-2f1b5a880a83
+	fromColumn: fExameEmpresa.EMPRESA
+	toColumn: dEmpresa.EMPRESA
+

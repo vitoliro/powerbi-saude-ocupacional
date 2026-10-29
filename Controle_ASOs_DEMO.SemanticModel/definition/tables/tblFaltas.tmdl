@@ -1,0 +1,95 @@
+table tblFaltas
+	lineageTag: 064302b3-01a4-4b7f-a7a9-f9c4b90a1692
+
+	column CPF
+		dataType: string
+		lineageTag: 17c94fd3-eb48-4892-9917-c4147572bea8
+		summarizeBy: none
+		sourceColumn: CPF
+
+		annotation SummarizationSetBy = Automatic
+
+	column NOME
+		dataType: string
+		lineageTag: caddfd9d-b5c8-4c89-ba9e-5cc4330f4e20
+		summarizeBy: none
+		sourceColumn: NOME
+
+		annotation SummarizationSetBy = Automatic
+
+	column EMPRESA
+		dataType: string
+		lineageTag: 5e7b142d-ea1d-42d7-9522-096460b23823
+		summarizeBy: none
+		sourceColumn: EMPRESA
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'UNIDADE DE NEGÓCIO'
+		dataType: string
+		lineageTag: a05425b8-0522-4105-b68c-525235acbcbb
+		summarizeBy: none
+		sourceColumn: UNIDADE DE NEGÓCIO
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'DATA DO AGENDAMENTO'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 8c17ceca-26e2-485b-ba86-8a832a1f5514
+		summarizeBy: none
+		sourceColumn: DATA DO AGENDAMENTO
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'TIPO DE EXAME'
+		dataType: string
+		lineageTag: df9003f8-c16d-432a-9681-61e0c6451d7f
+		summarizeBy: none
+		sourceColumn: TIPO DE EXAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column SITUAÇÃO
+		dataType: string
+		lineageTag: e812fd1f-3c06-4df5-833c-d48a57e81a1c
+		summarizeBy: none
+		sourceColumn: SITUAÇÃO
+
+		annotation SummarizationSetBy = Automatic
+
+	column MÊS
+		dataType: string
+		lineageTag: 1784a114-c9e4-4a8a-96c6-7408187cae91
+		summarizeBy: none
+		sourceColumn: MÊS
+		sortByColumn: 'MÊS ORDEM'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'MÊS ORDEM'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 78c18044-5693-4a24-9bf4-25f43252db25
+		summarizeBy: none
+		sourceColumn: MÊS ORDEM
+
+		annotation SummarizationSetBy = Automatic
+
+	partition tblFaltas = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(PastaDados & "Base_Controle_ASOs_DEMO.xlsx"), null, true),
+				    Tabela = Fonte{[Item="tblFaltas",Kind="Table"]}[Data],
+				    Tipos = Table.TransformColumnTypes(Tabela, {{"CPF", type text}, {"NOME", type text}, {"EMPRESA", type text}, {"UNIDADE DE NEGÓCIO", type text}, {"DATA DO AGENDAMENTO", type date}, {"TIPO DE EXAME", type text}, {"SITUAÇÃO", type text}}),
+				    Mes = Table.AddColumn(Tipos, "MÊS", each Date.ToText([DATA DO AGENDAMENTO], "MMM/yy", "pt-BR"), type text),
+				    MesOrdem = Table.AddColumn(Mes, "MÊS ORDEM", each Date.Year([DATA DO AGENDAMENTO]) * 100 + Date.Month([DATA DO AGENDAMENTO]), Int64.Type)
+				in
+				    MesOrdem
+
+	annotation PBI_ResultType = Table
+

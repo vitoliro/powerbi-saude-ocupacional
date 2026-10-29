@@ -1,0 +1,70 @@
+table tblHistorico
+	lineageTag: 845160d3-fb66-4ec1-a3fb-e7d33108432e
+
+	column 'DATA DO SNAPSHOT'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 9dc304d4-abad-4baf-aef5-87b6a6159761
+		summarizeBy: none
+		sourceColumn: DATA DO SNAPSHOT
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'UNIDADE DE NEGÓCIO'
+		dataType: string
+		lineageTag: a6c1ebb6-7b51-4c83-9cd1-f1410a41be66
+		summarizeBy: none
+		sourceColumn: UNIDADE DE NEGÓCIO
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'VENCIMENTOS 90 DIAS'
+		dataType: int64
+		formatString: 0
+		lineageTag: 433925bc-e481-4879-ba20-fdb05773fd4e
+		summarizeBy: none
+		sourceColumn: VENCIMENTOS 90 DIAS
+
+		annotation SummarizationSetBy = Automatic
+
+	column VENCIDOS
+		dataType: int64
+		formatString: 0
+		lineageTag: 605f0172-0c30-4845-9526-36c07d1509cc
+		summarizeBy: none
+		sourceColumn: VENCIDOS
+
+		annotation SummarizationSetBy = Automatic
+
+	column AGENDADOS
+		dataType: int64
+		formatString: 0
+		lineageTag: 55be1a66-7f4a-4b5c-87ea-6dddbef48297
+		summarizeBy: none
+		sourceColumn: AGENDADOS
+
+		annotation SummarizationSetBy = Automatic
+
+	column REALIZADOS
+		dataType: int64
+		formatString: 0
+		lineageTag: 214fc3c8-a1bc-4262-bf9f-1fae6b6cb80c
+		summarizeBy: none
+		sourceColumn: REALIZADOS
+
+		annotation SummarizationSetBy = Automatic
+
+	partition tblHistorico = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(PastaDados & "Base_Controle_ASOs_DEMO.xlsx"), null, true),
+				    Tabela = Fonte{[Item="tblHistorico",Kind="Table"]}[Data],
+				    Tipos = Table.TransformColumnTypes(Tabela, {{"DATA DO SNAPSHOT", type date}, {"UNIDADE DE NEGÓCIO", type text}, {"VENCIMENTOS 90 DIAS", Int64.Type}, {"VENCIDOS", Int64.Type}, {"AGENDADOS", Int64.Type}, {"REALIZADOS", Int64.Type}})
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

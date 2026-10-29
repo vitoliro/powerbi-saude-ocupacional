@@ -1,0 +1,117 @@
+table tblDesligados
+	lineageTag: 37a39161-839a-4be8-b241-ae63f849e62e
+
+	column CPF
+		dataType: string
+		lineageTag: f30eb2a0-829f-4cc3-b12f-ed21cf89c3e0
+		summarizeBy: none
+		sourceColumn: CPF
+
+		annotation SummarizationSetBy = Automatic
+
+	column NOME
+		dataType: string
+		lineageTag: 1601f012-38dc-456c-8dd3-d06eb49eeee8
+		summarizeBy: none
+		sourceColumn: NOME
+
+		annotation SummarizationSetBy = Automatic
+
+	column CHAPA
+		dataType: string
+		lineageTag: b54b9975-5ed9-448d-aeb1-4b10d96e7684
+		summarizeBy: none
+		sourceColumn: CHAPA
+
+		annotation SummarizationSetBy = Automatic
+
+	column EMPRESA
+		dataType: string
+		lineageTag: fcb90266-fe0b-498a-b6b0-306978dbd8a8
+		summarizeBy: none
+		sourceColumn: EMPRESA
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'UNIDADE DE NEGÓCIO'
+		dataType: string
+		lineageTag: 5c1cc8cf-de7b-4828-8df0-f6b704d582aa
+		summarizeBy: none
+		sourceColumn: UNIDADE DE NEGÓCIO
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'DATA DE DESLIGAMENTO'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: feb6650b-47e0-4092-a403-a793ed2a274b
+		summarizeBy: none
+		sourceColumn: DATA DE DESLIGAMENTO
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ÚLTIMO ASO'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 9fb89e5d-4386-4e22-933c-3fa44a613bda
+		summarizeBy: none
+		sourceColumn: ÚLTIMO ASO
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column ORIGEM
+		dataType: string
+		lineageTag: ac5ea3ba-179e-4968-96be-2d3c3ec7ced3
+		summarizeBy: none
+		sourceColumn: ORIGEM
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'REGISTRADO EM'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 50dfa1b4-6847-417b-af22-093c3df996a3
+		summarizeBy: none
+		sourceColumn: REGISTRADO EM
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column MÊS
+		dataType: string
+		lineageTag: d964eae7-0d62-406c-8300-22b20e534e04
+		summarizeBy: none
+		sourceColumn: MÊS
+		sortByColumn: 'MÊS ORDEM'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'MÊS ORDEM'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0711a02e-d584-4d09-ac69-42257bb18b0d
+		summarizeBy: none
+		sourceColumn: MÊS ORDEM
+
+		annotation SummarizationSetBy = Automatic
+
+	partition tblDesligados = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(PastaDados & "Base_Controle_ASOs_DEMO.xlsx"), null, true),
+				    Tabela = Fonte{[Item="tblDesligados",Kind="Table"]}[Data],
+				    Tipos = Table.TransformColumnTypes(Tabela, {{"CPF", type text}, {"NOME", type text}, {"CHAPA", type text}, {"EMPRESA", type text}, {"UNIDADE DE NEGÓCIO", type text}, {"DATA DE DESLIGAMENTO", type date}, {"ÚLTIMO ASO", type date}, {"ORIGEM", type text}, {"REGISTRADO EM", type date}}),
+				    Mes = Table.AddColumn(Tipos, "MÊS", each Date.ToText([DATA DE DESLIGAMENTO], "MMM/yy", "pt-BR"), type text),
+				    MesOrdem = Table.AddColumn(Mes, "MÊS ORDEM", each Date.Year([DATA DE DESLIGAMENTO]) * 100 + Date.Month([DATA DE DESLIGAMENTO]), Int64.Type)
+				in
+				    MesOrdem
+
+	annotation PBI_ResultType = Table
+

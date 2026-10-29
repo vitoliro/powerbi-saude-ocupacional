@@ -1,0 +1,229 @@
+/// Um colaborador por linha (base fictícia).
+table tblASOS
+	lineageTag: 0515ae79-baef-445f-b12d-1f6ffe354250
+
+	column CPF
+		dataType: string
+		lineageTag: e5ba621b-cd83-466c-9587-4783d4025ed3
+		summarizeBy: none
+		sourceColumn: CPF
+
+		annotation SummarizationSetBy = Automatic
+
+	column NOME
+		dataType: string
+		lineageTag: 7af7cea6-8bed-4dd3-98f6-66406f7fcefa
+		summarizeBy: none
+		sourceColumn: NOME
+
+		annotation SummarizationSetBy = Automatic
+
+	column CHAPA
+		dataType: string
+		lineageTag: 776fad5f-e278-4192-b406-cae0905e4b37
+		summarizeBy: none
+		sourceColumn: CHAPA
+
+		annotation SummarizationSetBy = Automatic
+
+	column EMPRESA
+		dataType: string
+		lineageTag: 77965572-3532-4832-b9e0-87f3dfb6539f
+		summarizeBy: none
+		sourceColumn: EMPRESA
+
+		annotation SummarizationSetBy = Automatic
+
+	column CNPJ
+		dataType: string
+		lineageTag: 976c4ef2-280c-4ffd-96c6-40e9661d7ebc
+		summarizeBy: none
+		sourceColumn: CNPJ
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'POSTO DE TRABALHO - GHE'
+		dataType: string
+		lineageTag: 7a9c8419-1727-4e8f-a445-4214d1c74252
+		summarizeBy: none
+		sourceColumn: POSTO DE TRABALHO - GHE
+
+		annotation SummarizationSetBy = Automatic
+
+	column FUNÇÃO
+		dataType: string
+		lineageTag: 8cd046ac-07b3-402d-baea-002e38044315
+		summarizeBy: none
+		sourceColumn: FUNÇÃO
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'UNIDADE DE NEGÓCIO'
+		dataType: string
+		lineageTag: 9af880e9-2b3e-4ef7-81a9-97d9f6a98446
+		summarizeBy: none
+		sourceColumn: UNIDADE DE NEGÓCIO
+
+		annotation SummarizationSetBy = Automatic
+
+	column ADMISSÃO
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 1b9e695f-d575-47eb-8949-974978c8c8d1
+		summarizeBy: none
+		sourceColumn: ADMISSÃO
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column E-MAIL
+		dataType: string
+		lineageTag: 9dbaf544-0411-4d9a-b819-c88497bc6ec8
+		summarizeBy: none
+		sourceColumn: E-MAIL
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'GESTOR DIRETO'
+		dataType: string
+		lineageTag: 7dd9a386-cc52-4b95-a4ce-60e4b553090f
+		summarizeBy: none
+		sourceColumn: GESTOR DIRETO
+
+		annotation SummarizationSetBy = Automatic
+
+	column VENCIMENTO
+		dataType: string
+		lineageTag: ab9491fe-9518-4f7c-a066-875032d04338
+		summarizeBy: none
+		sourceColumn: VENCIMENTO
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'DATA DE VENCIMENTO'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 1adb14c3-2e2c-4f3c-9f65-9970ca4d7a27
+		summarizeBy: none
+		sourceColumn: DATA DE VENCIMENTO
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column STATUS
+		dataType: string
+		lineageTag: 28f0206f-1319-4ca1-bddb-0fd9a74b6c3a
+		summarizeBy: none
+		sourceColumn: STATUS
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'STATUS FINAL'
+		dataType: string
+		lineageTag: 923683a4-45bd-4827-9836-17fd17c48605
+		summarizeBy: none
+		sourceColumn: STATUS FINAL
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ÚLTIMO ASO'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 7ce5711b-e376-4050-9115-4785582563a8
+		summarizeBy: none
+		sourceColumn: ÚLTIMO ASO
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'DATA DE AGENDAMENTO'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 5dc23dbc-8f81-4f8b-ad67-e72a032e43ec
+		summarizeBy: none
+		sourceColumn: DATA DE AGENDAMENTO
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'TIPO DE ASO'
+		dataType: string
+		lineageTag: 4f0ca801-ad9a-471e-abc6-e90f8da188dd
+		summarizeBy: none
+		sourceColumn: TIPO DE ASO
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'DIAS PARA VENCER'
+		dataType: int64
+		formatString: 0
+		lineageTag: c8aeaa9d-8774-4e58-b9f9-66febc2b0d64
+		summarizeBy: none
+		sourceColumn: DIAS PARA VENCER
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'NA BASE'
+		dataType: boolean
+		lineageTag: 84c0fcdf-400e-4924-b842-cc564e68e5b2
+		summarizeBy: none
+		sourceColumn: NA BASE
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'FAIXA 90D'
+		dataType: string
+		lineageTag: a2abd988-abde-4132-a096-edef69967875
+		summarizeBy: none
+		sourceColumn: FAIXA 90D
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'SITUAÇÃO AGENDAMENTO'
+		dataType: string
+		lineageTag: f7031937-6589-45ef-a6ad-1d4738898531
+		summarizeBy: none
+		sourceColumn: SITUAÇÃO AGENDAMENTO
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'DIAS ANTECIPAÇÃO AGENDADO'
+		dataType: int64
+		formatString: 0
+		lineageTag: 998359d0-3110-4d22-bae8-7fc099b84e44
+		summarizeBy: none
+		sourceColumn: DIAS ANTECIPAÇÃO AGENDADO
+
+		annotation SummarizationSetBy = Automatic
+
+	partition tblASOS = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(PastaDados & "Base_Controle_ASOs_DEMO.xlsx"), null, true),
+				    Tabela = Fonte{[Item="tblASOS",Kind="Table"]}[Data],
+				    Tipos = Table.TransformColumnTypes(Tabela, {{"CPF", type text}, {"NOME", type text}, {"CHAPA", type text}, {"EMPRESA", type text}, {"CNPJ", type text}, {"POSTO DE TRABALHO - GHE", type text}, {"FUNÇÃO", type text}, {"UNIDADE DE NEGÓCIO", type text}, {"ADMISSÃO", type date}, {"E-MAIL", type text}, {"GESTOR DIRETO", type text}, {"VENCIMENTO", type text}, {"DATA DE VENCIMENTO", type date}, {"STATUS", type text}, {"STATUS FINAL", type text}, {"ÚLTIMO ASO", type date}, {"DATA DE AGENDAMENTO", type date}, {"TIPO DE ASO", type text}}),
+				    DiasParaVencer = Table.AddColumn(Tipos, "DIAS PARA VENCER", each Duration.Days([DATA DE VENCIMENTO] - DataReferencia), Int64.Type),
+				    NaBase = Table.AddColumn(DiasParaVencer, "NA BASE", each List.Contains({"Ativo", "Férias", "Licença Remunerada"}, [STATUS]) and [VENCIMENTO] <> "EXCEÇÃO DIRETORIA", type logical),
+				    Faixa = Table.AddColumn(NaBase, "FAIXA 90D", each
+				        if [DIAS PARA VENCER] < 0 then "Vencido"
+				        else if [DIAS PARA VENCER] <= 7 then "Até 7 dias"
+				        else if [DIAS PARA VENCER] <= 30 then "8 a 30 dias"
+				        else if [DIAS PARA VENCER] <= 60 then "31 a 60 dias"
+				        else if [DIAS PARA VENCER] <= 90 then "61 a 90 dias"
+				        else "Acima de 90 dias", type text),
+				    Situacao = Table.AddColumn(Faixa, "SITUAÇÃO AGENDAMENTO", each
+				        if [DATA DE AGENDAMENTO] = null then "Sem agendamento"
+				        else if [DATA DE AGENDAMENTO] <= DataReferencia then "Realizado"
+				        else "Agendado", type text),
+				    AntecipacaoAgendado = Table.AddColumn(Situacao, "DIAS ANTECIPAÇÃO AGENDADO", each
+				        if [SITUAÇÃO AGENDAMENTO] = "Agendado" then Duration.Days([DATA DE VENCIMENTO] - [DATA DE AGENDAMENTO]) else null, Int64.Type)
+				in
+				    AntecipacaoAgendado
+
+	annotation PBI_ResultType = Table
+

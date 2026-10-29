@@ -1,0 +1,41 @@
+table dPerCapita
+	lineageTag: 16e5af7a-b321-47e3-b2c4-a4496d6ea707
+
+	column 'PER CAPITA'
+		dataType: string
+		lineageTag: b82d1423-e165-4f62-b8d9-644e0a60cdda
+		summarizeBy: none
+		sourceColumn: PER CAPITA
+		sortByColumn: ORDEM
+
+		annotation SummarizationSetBy = Automatic
+
+	column INCLUI
+		dataType: int64
+		formatString: 0
+		lineageTag: 3bef2f54-2bbf-4fd2-bbd1-774a890fb966
+		summarizeBy: none
+		sourceColumn: INCLUI
+
+		annotation SummarizationSetBy = Automatic
+
+	column ORDEM
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 040fe7f7-7570-4045-a0dc-4b358f5f285c
+		summarizeBy: none
+		sourceColumn: ORDEM
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dPerCapita = m
+		mode: import
+		source =
+				let
+				    Fonte = #table(type table [#"PER CAPITA" = text, #"INCLUI" = Int64.Type, #"ORDEM" = Int64.Type], {{"Com per capita", 1, 1}, {"Sem per capita", 0, 2}})
+				in
+				    Fonte
+
+	annotation PBI_ResultType = Table
+

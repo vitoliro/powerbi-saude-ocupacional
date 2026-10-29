@@ -1,0 +1,32 @@
+table dFaixaAntecipacao
+	lineageTag: 15424542-c986-4728-a7ea-9d8bd14de721
+
+	column FAIXA
+		dataType: string
+		lineageTag: 98c02997-79a2-4c56-bd65-f6ad17d1b28b
+		summarizeBy: none
+		sourceColumn: FAIXA
+		sortByColumn: ORDEM
+
+		annotation SummarizationSetBy = Automatic
+
+	column ORDEM
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 535487a6-10ce-40b5-a478-708e0c552f51
+		summarizeBy: none
+		sourceColumn: ORDEM
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dFaixaAntecipacao = m
+		mode: import
+		source =
+				let
+				    Fonte = #table(type table [#"FAIXA" = text, #"ORDEM" = Int64.Type], {{"Já vencido", 1}, {"Até 7 dias", 2}, {"8 a 30 dias", 3}, {"31 a 60 dias", 4}, {"61 a 90 dias", 5}, {"91 a 120 dias", 6}})
+				in
+				    Fonte
+
+	annotation PBI_ResultType = Table
+

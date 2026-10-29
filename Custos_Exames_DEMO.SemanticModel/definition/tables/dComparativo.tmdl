@@ -1,0 +1,32 @@
+table dComparativo
+	lineageTag: 44e0df84-0266-4cb3-8591-6ad679cceb7d
+
+	column VISÃO
+		dataType: string
+		lineageTag: 09b43d1a-fb4e-4b23-8d31-4825856e0be2
+		summarizeBy: none
+		sourceColumn: VISÃO
+		sortByColumn: ORDEM
+
+		annotation SummarizationSetBy = Automatic
+
+	column ORDEM
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 2d27cd91-8f19-4a61-b1bd-20cff76a04ea
+		summarizeBy: none
+		sourceColumn: ORDEM
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dComparativo = m
+		mode: import
+		source =
+				let
+				    Fonte = #table(type table [#"VISÃO" = text, #"ORDEM" = Int64.Type], {{"Alfa · atual", 1}, {"Beta · atual", 2}, {"Alfa + Beta · atual", 3}, {"Unificado · novo preço", 4}})
+				in
+				    Fonte
+
+	annotation PBI_ResultType = Table
+

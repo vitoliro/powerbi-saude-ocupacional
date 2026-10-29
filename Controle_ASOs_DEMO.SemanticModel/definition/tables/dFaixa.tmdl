@@ -1,0 +1,32 @@
+table dFaixa
+	lineageTag: a220414e-a75b-43ba-bb48-4bf682104ab7
+
+	column FAIXA
+		dataType: string
+		lineageTag: d273119c-e8ee-44e3-95b4-42d9e4dce7e1
+		summarizeBy: none
+		sourceColumn: FAIXA
+		sortByColumn: ORDEM
+
+		annotation SummarizationSetBy = Automatic
+
+	column ORDEM
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4276626e-f801-465c-833b-3329a45e5d41
+		summarizeBy: none
+		sourceColumn: ORDEM
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dFaixa = m
+		mode: import
+		source =
+				let
+				    Fonte = #table(type table [#"FAIXA" = text, #"ORDEM" = Int64.Type], {{"Vencido", 1}, {"Até 7 dias", 2}, {"8 a 30 dias", 3}, {"31 a 60 dias", 4}, {"61 a 90 dias", 5}, {"Acima de 90 dias", 6}})
+				in
+				    Fonte
+
+	annotation PBI_ResultType = Table
+

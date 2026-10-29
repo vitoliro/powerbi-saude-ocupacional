@@ -1,0 +1,29 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: pt-BR
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["PastaDados","dExame","dEmpresa","fExameEmpresa","dPeriodo","dPerCapita","dCenario","dComparativo","dPonte","dTopN","tblPremissas"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table dExame
+ref table dEmpresa
+ref table fExameEmpresa
+ref table dPeriodo
+ref table dPerCapita
+ref table dCenario
+ref table dComparativo
+ref table dPonte
+ref table dTopN
+ref table tblPremissas
+ref table Medidas
+
+ref cultureInfo pt-BR
+
