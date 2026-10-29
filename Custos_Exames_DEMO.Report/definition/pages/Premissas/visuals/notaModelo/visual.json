@@ -1,0 +1,188 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.5.0/schema.json",
+  "name": "notaModelo",
+  "position": {
+    "x": 216,
+    "y": 408,
+    "z": 7000,
+    "height": 300,
+    "width": 1040,
+    "tabOrder": 7000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Modelo",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#14303C",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Estrela: a fato fExameEmpresa (volume e preço por empresa e exame) liga-se a dExame e dEmpresa. ",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#5E6E78",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "dPeriodo, dPerCapita, dCenario, dComparativo, dPonte e dTopN são tabelas de parâmetro desconectadas, lidas com SELECTEDVALUE dentro das medidas. Assim os mesmos visuais respondem a mensal/anual e com/sem per capita.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#5E6E78",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Técnicas",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#14303C",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "SUMX exame a exame, CALCULATE por empresa, RANKX com Top N dinâmico, curva de Pareto, cascata de economia, filtros de página e slicers sincronizados.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#5E6E78",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Origem",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#14303C",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Planilha Excel fictícia carregada por Power Query; o caminho fica no parâmetro PastaDados.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#5E6E78",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}
