@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Controle_ASOs_DEMO"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "5e583bd4-4760-47f8-b8af-81d5dc9aea9d"
+  }
+}
