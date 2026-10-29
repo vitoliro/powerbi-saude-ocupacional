@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Custos_Exames_DEMO"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "91287d60-b57a-45be-9cbc-390cbe5b3552"
+  }
+}
